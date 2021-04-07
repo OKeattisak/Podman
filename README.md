@@ -18,3 +18,18 @@ ps -aux | grep mysqld | grep -v grep
 ip addr
 
 mysql -u root -h <IP> -p
+
+mkdir -p .config/systemd/user/
+cd .config/systemd/user/
+
+podman generate systemd --name db-mariadb --files --new
+systemctl --user daemon-reload
+
+podman stop db-mariadb
+podman rm db-mariadb
+
+systemctl --user status container-db-mariadb.service
+
+systemctl --user enable --now container-db-mariadb.service
+
+systemctl --user status container-db-mariadb.service
